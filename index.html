@@ -1,19 +1,40 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
 
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
-  </body>
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Aerovel Sign In</title>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+
+
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet">
+</head>
+<body class="text-center">
+<form class="form-signin">
+    <img class="mb-4" src="img/flexrotorstanding.jpg" alt="" width="200" height="200">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="fullName" class="sr-only">Name</label>
+    <input type="name" id="fullName" class="form-control" placeholder="Full Name">
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email address">
+
+    <div class="checkbox mb-3">
+
+        <label>
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+    </div>
+        <input type=button id="submit" value='Submit' required>
+
+</form>
+<script src="js/signin.js"></script>
+
+</body>
 </html>
