@@ -6,8 +6,8 @@ const { promisify } = require(`util`);
 const readFile = promisify(fs.readFile);
 
 flag = false;
-let DOMParser = require('xmldom').DOMParser;
-let parser = new DOMParser();
+var DomParser = require('dom-parser');
+var parser = new DomParser();
 let workBook = XLSX.readFile(`${p}`);
 let i = 2;
 let questions = [];
@@ -23,23 +23,27 @@ let worksheet = workBook.Sheets[firstSheet];
 let questionCell = 'A';
 let answerCells = ['B','C','D','E'];
 let dataCalcCell = 'G';
+let ansIndex = 0;
+const {BrowserWindow} = require('electron')
 
 while(!flag){
 
     questionColumn = worksheet[questionCell + i.toString()];
     dataCalcColumn = worksheet[dataCalcCell + i.toString()];
+    answerColumn = [];
 
     if(questionColumn === undefined){
         flag = true;
     }else{
         for(let k = 0; k < 4; k++){
-            answerColumn = worksheet[answerCells[k] + i.toString()];
+            answerColumn.push (worksheet[answerCells[k] + i.toString()].v + ' ');
             //console.log(answerColumn);
         }
         questions.push(questionColumn);
         dataCalVal.push(dataCalcColumn)
         answers.push(answerColumn);
         i++;
+        ansIndex++;
     }
 }
 
@@ -49,33 +53,42 @@ function loadHTML(html){
 let dom,rawUlList, parsedBody;
     let liElements = [];
 
-    rawUlList = fs.readFileSync(path.join(__dirname,'./..', html), `utf-8`);
-    dom = parser.parseFromString(rawUlList,'text/html');
-    parsedBody = dom.getElementsByTagName('label');
-    console.log(parsedBody);
-    dom.appendChild("TESTESTEST");
-        /*
+    fs.readFile(path.join(__dirname,'./..', html), `utf-8`, function(err, html) {
+        if (!err){
+          var dom = parser.parseFromString(html); 
+          var updatedHtmlStr = '<div id="listq">';
+          updatedHtmlStr += dom.getElementById('listq').innerHTML;
+          var qcounter = dom.getElementsByTagName('li').length;
+          
+          questions.forEach((item, ind) => {
+            console.log(item.v);
+            console.log(answers[ind]);
+            qcounter = qcounter + 1;
+            updatedHtmlStr += '<li class="QA'+qcounter+'" id="id_'+qcounter+'" data-type="control_checkbox">';
+            updatedHtmlStr += '<label class="Question" id="Q'+qcounter+'" for="input_'+qcounter+'_0">' + item.v + '</label>';
+            updatedHtmlStr += '<div class="Answers" data-component="checkbox">';
 
-        ,function read(err, html){
-            if (!err){
-                dom = parser.parseFromString(raw, 'text/html');
-                rawUlList = dom.getElementsByTagName("body").innerHTML;
-                console.log(rawUlList);
+            var ansArr= answers[ind];
+                ansArr.forEach((ansItem, ansInd) => {
+                    updatedHtmlStr += '<input name="answer" class="form-checkbox" id="input_'+qcounter+'_'+ansInd+'" type="checkbox" value="'+ansItem+'" data-calcvalue="true">';
+                    updatedHtmlStr += '<label id="label_input_'+qcounter+'_'+ansInd+'" for="input_'+qcounter+'_'+ansInd+'"> '+ansItem+' </label>';
 
-                for(let i = 0; i < rawUlList.length; i++){
-                    liElements.push(rawUlList[i].innerHTML)
-                }
+                }); 
+                updatedHtmlStr += '</div>';
+                updatedHtmlStr += '</li>';
+          });
+          
+         
+      updatedHtmlStr += '</div>';
+      fs.writeFileSync("./qlist.html", updatedHtmlStr, {encoding: "utf8"});
+      BrowserWindow.getFocusedWindow().reload();
+          //console.log(updatedHtmlStr);
+        }
+    })
 
-            }else{
-                alert("Could Not Read MO_FINAL!");
-            }
-            //console.log(liElements);
-            processFile(raw);
-        })
-        */
 };
 
-loadHTML('MOfinal.html')
+loadHTML('qlist.html')
 function processFile(body) {
 
 

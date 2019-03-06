@@ -25,6 +25,7 @@
     "babel": "^6.23.0",
     "bootstrap": "^4.2.1",
     "dom-parser": "^0.1.5",
+    "i": "^0.3.6",
     "install": "^0.12.2",
     "jquery": "^3.3.1",
     "mandrill-api": "^1.0.45",
